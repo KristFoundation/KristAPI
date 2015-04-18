@@ -1,4 +1,8 @@
 --KristAPI Alpha
+if not http then
+  printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
+  error()
+end
 local version = "Alpha"
 function getVersion()
   return version
@@ -9,9 +13,6 @@ end
 base = trim(http.get("https://raw.githubusercontent.com/BTCTaras/kristwallet/master/staticapi/syncNode").readAll())
 local MOD = 2^32
 local MODM = MOD-1
-if not http then
-  printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
-end
 --SHA256, needed for other processes
 local function hextobase36(j)
   if j <= 6 then return "0"
