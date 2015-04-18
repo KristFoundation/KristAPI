@@ -227,7 +227,6 @@ function give(to, amount, password)
 	    prb = "Invalid receiver"
 	  end
 	  return false, prb
-	  error()
     else
       printError(trans)
     end
