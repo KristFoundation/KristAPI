@@ -6,7 +6,7 @@ if not http then
   return
 end
 function getVersion()
-  return version
+  return "KristAPI " .. version
 end
 local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
