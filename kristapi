@@ -1,7 +1,7 @@
 --KristAPI Alpha
 local version = "Alpha"
 if not http then
-  printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
+  printError("KristAPI " .. version .. " requires the HTTP API to be enabled!")
   failedLoad = true
   return
 end
