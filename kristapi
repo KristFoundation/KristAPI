@@ -7,6 +7,8 @@ local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 base = trim(http.get("https://raw.githubusercontent.com/BTCTaras/kristwallet/master/staticapi/syncNode").readAll())
+local MOD = 2^32
+local MODM = MOD-1
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
 end
