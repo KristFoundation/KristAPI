@@ -3,6 +3,7 @@ local version = "Alpha"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
   _G.failedLoad = true
+  error()
 end
 function getVersion()
   return version
