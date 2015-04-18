@@ -278,3 +278,5 @@ function balance(address) --Used with miner address, you can do balance(createad
   local balance = http.get("http://ceriat.net/krist/?getbalance=" .. address).readAll()
   return balance
 end
+
+failedLoad = false
