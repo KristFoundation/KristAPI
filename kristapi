@@ -1,9 +1,9 @@
 --KristAPI Alpha
+local version = "Alpha"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
   error()
 end
-local version = "Alpha"
 function getVersion()
   return version
 end
