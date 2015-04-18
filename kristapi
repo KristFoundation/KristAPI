@@ -213,7 +213,7 @@ end
 function give(to, amount, password)
   local trans = http.get(base .. "?pushtx2&q=" .. to .. "&pkey=" .. kristapi.sha256("KRISTWALLET" .. password) .. "-000&amt=" .. amount).readAll()
   if trans == "Success" then
-      info("Success! " .. am .. " KST was put into vault " .. addressdv)
+      return true
   elseif string.sub(trans, 0,5) == "Error" then
     local prob = "Unknown Error"
 	  local c = tonumber(string.sub(trans,6,10))
@@ -226,7 +226,7 @@ function give(to, amount, password)
 	  elseif c == 4 then
 	    prb = "Invalid receiver"
 	  end
-	  printError("Failed! Error: " .. prob)
+	  return false, prb
 	  error()
     else
       printError(trans)
