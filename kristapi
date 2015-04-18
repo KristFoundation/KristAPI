@@ -13,6 +13,46 @@ if not http then
   printError("KristAPI " .. version .. " requires the HTTP api to be enabled!")
 end
 --SHA256, needed for other processes
+local function hextobase36(j)
+  if j <= 6 then return "0"
+  elseif j <= 13 then return "1"
+  elseif j <= 20 then return "2"
+  elseif j <= 27 then return "3"
+  elseif j <= 34 then return "4"
+  elseif j <= 41 then return "5"
+  elseif j <= 48 then return "6"
+  elseif j <= 55 then return "7"
+  elseif j <= 62 then return "8"
+  elseif j <= 69 then return "9"
+  elseif j <= 76 then return "a"
+  elseif j <= 83 then return "b"
+  elseif j <= 90 then return "c"
+  elseif j <= 97 then return "d"
+  elseif j <= 104 then return "e"
+  elseif j <= 111 then return "f"
+  elseif j <= 118 then return "g"
+  elseif j <= 125 then return "h"
+  elseif j <= 132 then return "i"
+  elseif j <= 139 then return "j"
+  elseif j <= 146 then return "k"
+  elseif j <= 153 then return "l"
+  elseif j <= 160 then return "m"
+  elseif j <= 167 then return "n"
+  elseif j <= 174 then return "o"
+  elseif j <= 181 then return "p"
+  elseif j <= 188 then return "q"
+  elseif j <= 195 then return "r"
+  elseif j <= 202 then return "s"
+  elseif j <= 209 then return "t"
+  elseif j <= 216 then return "u"
+  elseif j <= 223 then return "v"
+  elseif j <= 230 then return "w"
+  elseif j <= 237 then return "x"
+  elseif j <= 244 then return "y"
+  elseif j <= 251 then return "z"
+  else return "e"
+  end
+end
 local function memoize(f)
         local mt = {}
         local t = setmetatable({}, mt)
