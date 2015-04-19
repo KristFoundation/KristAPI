@@ -1,5 +1,5 @@
 --KristAPI Alpha
-local version = "Alpha 0.5"
+local version = "Alpha 0.51"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP API to be enabled!")
   failedLoad = true
@@ -283,8 +283,13 @@ function createrawaddress(password)
   return txt:sub(0, 10);
 end
 --Sending money
-function give(to, amount, password)
-  local trans = http.get(base .. "?pushtx2&q=" .. to .. "&pkey=" .. kristapi.sha256("KRISTWALLET" .. password) .. "-000&amt=" .. amount).readAll()
+function give(to, amount, password, isVault) --Be sure to set "isVault" to true if you're using a sha256 hash!
+  if not isVault then
+    mkey = kristapi.sha256("KRISTWALLET" .. password)
+  else
+    mkey = password
+  end
+  local trans = http.get(base .. "?pushtx2&q=" .. to .. "&pkey=" .. mkey .. "-000&amt=" .. amount).readAll()
   if trans == "Success" then
       return true
   elseif string.sub(trans, 0,5) == "Error" then
