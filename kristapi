@@ -12,49 +12,9 @@ local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 base = trim(http.get("https://raw.githubusercontent.com/BTCTaras/kristwallet/master/staticapi/syncNode").readAll())
+--SHA256, needed for other processes
 local MOD = 2^32
 local MODM = MOD-1
---SHA256, needed for other processes
-local function hextobase36(j)
-  if j <= 6 then return "0"
-  elseif j <= 13 then return "1"
-  elseif j <= 20 then return "2"
-  elseif j <= 27 then return "3"
-  elseif j <= 34 then return "4"
-  elseif j <= 41 then return "5"
-  elseif j <= 48 then return "6"
-  elseif j <= 55 then return "7"
-  elseif j <= 62 then return "8"
-  elseif j <= 69 then return "9"
-  elseif j <= 76 then return "a"
-  elseif j <= 83 then return "b"
-  elseif j <= 90 then return "c"
-  elseif j <= 97 then return "d"
-  elseif j <= 104 then return "e"
-  elseif j <= 111 then return "f"
-  elseif j <= 118 then return "g"
-  elseif j <= 125 then return "h"
-  elseif j <= 132 then return "i"
-  elseif j <= 139 then return "j"
-  elseif j <= 146 then return "k"
-  elseif j <= 153 then return "l"
-  elseif j <= 160 then return "m"
-  elseif j <= 167 then return "n"
-  elseif j <= 174 then return "o"
-  elseif j <= 181 then return "p"
-  elseif j <= 188 then return "q"
-  elseif j <= 195 then return "r"
-  elseif j <= 202 then return "s"
-  elseif j <= 209 then return "t"
-  elseif j <= 216 then return "u"
-  elseif j <= 223 then return "v"
-  elseif j <= 230 then return "w"
-  elseif j <= 237 then return "x"
-  elseif j <= 244 then return "y"
-  elseif j <= 251 then return "z"
-  else return "e"
-  end
-end
 local function memoize(f)
         local mt = {}
         local t = setmetatable({}, mt)
@@ -218,6 +178,46 @@ function sha256(msg)
                 num2s(H[5], 4) .. num2s(H[6], 4) .. num2s(H[7], 4) .. num2s(H[8], 4))
 end
 --Making V2 address. Intended for wallets.
+local function tobase36(j)
+  if j <= 6 then return "0"
+  elseif j <= 13 then return "1"
+  elseif j <= 20 then return "2"
+  elseif j <= 27 then return "3"
+  elseif j <= 34 then return "4"
+  elseif j <= 41 then return "5"
+  elseif j <= 48 then return "6"
+  elseif j <= 55 then return "7"
+  elseif j <= 62 then return "8"
+  elseif j <= 69 then return "9"
+  elseif j <= 76 then return "a"
+  elseif j <= 83 then return "b"
+  elseif j <= 90 then return "c"
+  elseif j <= 97 then return "d"
+  elseif j <= 104 then return "e"
+  elseif j <= 111 then return "f"
+  elseif j <= 118 then return "g"
+  elseif j <= 125 then return "h"
+  elseif j <= 132 then return "i"
+  elseif j <= 139 then return "j"
+  elseif j <= 146 then return "k"
+  elseif j <= 153 then return "l"
+  elseif j <= 160 then return "m"
+  elseif j <= 167 then return "n"
+  elseif j <= 174 then return "o"
+  elseif j <= 181 then return "p"
+  elseif j <= 188 then return "q"
+  elseif j <= 195 then return "r"
+  elseif j <= 202 then return "s"
+  elseif j <= 209 then return "t"
+  elseif j <= 216 then return "u"
+  elseif j <= 223 then return "v"
+  elseif j <= 230 then return "w"
+  elseif j <= 237 then return "x"
+  elseif j <= 244 then return "y"
+  elseif j <= 251 then return "z"
+  else return "e" --e is most commonly sought for vanity addresses
+  end
+end
 function makev2address(key)
   local protein = {}
   local stick = sha256(sha256(key))
@@ -233,7 +233,7 @@ function makev2address(key)
   repeat
     link = tonumber(string.sub(stick,1+(2*n),2+(2*n)),16) % 9
     if string.len(protein[link]) ~= 0 then
-      v2 = v2 .. hextobase36(tonumber(protein[link],16))
+      v2 = v2 .. tobase36(tonumber(protein[link],16))
       protein[link] = ''
       n = n + 1
     else
@@ -251,7 +251,12 @@ function createv1address(password)
   local txt = sha256("KRISTWALLET" .. pass) .. "-000"
   return txt:sub(0, 10);
 end
---Giving money
+--Create an outdated V1 address from a raw string (used for first few days of Krist).
+function createrawaddress(password)
+  local txt = sha256(pass)
+  return txt:sub(0, 10);
+end
+--Sending money
 function give(to, amount, password)
   local trans = http.get(base .. "?pushtx2&q=" .. to .. "&pkey=" .. kristapi.sha256("KRISTWALLET" .. password) .. "-000&amt=" .. amount).readAll()
   if trans == "Success" then
