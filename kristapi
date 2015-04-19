@@ -1,12 +1,12 @@
 --KristAPI Alpha
-local version = "Alpha"
+local version = "Alpha 0.2"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP API to be enabled!")
   failedLoad = true
   return
 end
 function getVersion()
-  return "KristAPI " .. version
+  return version
 end
 local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
