@@ -259,6 +259,24 @@ function createvault(password1, password2) --password1 = vault password, passwor
   return address, pass
 end
 --There is no local vault function, as it is literally just a sha256 hash stored as a file.
+--Allows any amount of passwords in a vault; the last is always your password. Returns the same as above. (Can substitute createvault(), although not recommended)
+function createcustomvault(...)
+  local tArgs = {...}
+  local yp = tArgs[#tArgs]
+  local args = {}
+  for i = 1, #tArgs-1 do
+    args[i] = tArgs[i]
+  end
+  tArgs = args
+  masterkey = kristapi.sha256("KRISTWALLET" .. yp) .. "-000"
+  str = ""
+  for i = 1, #tArgs do
+    str = str .. tArgs[i]
+  end
+  pass = kristapi.sha256(masterkey .. "-" .. kristapi.sha256(str))
+  address = kristapi.makev2address(pass)
+  return address, pass
+end
 --Create an outdated V1 address from a raw string (used for first few days of Krist).
 function createrawaddress(password)
   local txt = sha256(password)
