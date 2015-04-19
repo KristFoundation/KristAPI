@@ -248,7 +248,7 @@ function createaddress(password)
 end
 --Create an outdated V1 address with password.
 function createv1address(password)
-  local txt = sha256("KRISTWALLET" .. pass) .. "-000"
+  local txt = sha256("KRISTWALLET" .. password) .. "-000"
   return txt:sub(0, 10);
 end
 --Create an outdated V1 address from a raw string (used for first few days of Krist).
