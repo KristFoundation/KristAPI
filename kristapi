@@ -251,13 +251,14 @@ function createv1address(password)
   local txt = sha256("KRISTWALLET" .. password) .. "-000"
   return txt:sub(0, 10)
 end
---Create a vault. Returns the key and password of the vault (password is for use in all other functions)
+--Create a double vault. Returns the key and password of the vault (password is for use in all other functions)
 function createvault(password1, password2) --password1 = vault password, password2 = your password
   masterkey = kristapi.sha256("KRISTWALLET" .. password2) .. "-000"
   pass = kristapi.sha256(masterkey .. "-"..kristapi.sha256(password1))
   address = kristapi.makev2address(pass)
   return address, pass
 end
+--There is no local vault function, as it is literally just a sha256 hash stored as a file.
 --Create an outdated V1 address from a raw string (used for first few days of Krist).
 function createrawaddress(password)
   local txt = sha256(password)
