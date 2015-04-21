@@ -1,5 +1,5 @@
 --KristAPI Alpha
-local version = "Alpha 0.51"
+local version = "Alpha 0.52"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP API to be enabled!")
   failedLoad = true
@@ -259,7 +259,8 @@ function createvault(password1, password2) --password1 = vault password, passwor
   return address, pass
 end
 --There is no local vault function, as it is literally just a sha256 hash stored as a file.
---Allows any amount of passwords in a vault; the last is always your password. Returns the same as above, same syntax as above. (Can substitute createvault(), although not recommended)
+--Allows any amount of passwords in a vault; the last is always your password. Returns the same as above, same syntax as above.
+--NOTE: Encodes differently than createvault(), they are not interchangeable!
 function createcustomvault(...)
   local tArgs = {...}
   local yp = tArgs[#tArgs]
@@ -268,13 +269,13 @@ function createcustomvault(...)
     args[i] = tArgs[i]
   end
   tArgs = args
-  masterkey = kristapi.sha256("KRISTWALLET" .. yp) .. "-000"
+  masterkey = sha256("KRISTWALLET" .. yp) .. "-000"
   str = ""
   for i = 1, #tArgs do
-    str = str .. tArgs[i]
+    str = str .. sha256(tArgs[i])
   end
-  pass = kristapi.sha256(masterkey .. "-" .. kristapi.sha256(str))
-  address = kristapi.makev2address(pass)
+  pass = sha256(masterkey .. "-" .. sha256(str))
+  address = makev2address(pass)
   return address, pass
 end
 --Create an outdated V1 address from a raw string (used for first few days of Krist).
