@@ -330,7 +330,7 @@ function give(to, amount, password, isVault) --Be sure to set "isVault" to true 
 end
 --Get balance
 function balance(address) --Used with miner address, you can do balance(createaddress(password)) if you want to use the password but it will be slow
-  local balance = http.get("http://ceriat.net/krist/?getbalance=" .. address).readAll()
+  local balance = http.get(base .. "?getbalance=" .. address).readAll()
   return balance
 end
 
