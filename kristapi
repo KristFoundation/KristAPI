@@ -1,5 +1,5 @@
 --KristAPI Alpha
-local version = "Alpha 0.6"
+local version = "Alpha 0.61"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP API to be enabled!")
   failedLoad = true
@@ -295,11 +295,15 @@ function createrawaddress(password)
   local txt = sha256(password)
   return txt:sub(0, 10);
 end
---Returns all .kst domains a user has with KristScape. Returns a table like {"abc", "def", "ghi"}
+--Returns all .kst domains a user has with KristScape. Returns a table like {"atenefyr":"redirect.com"}
 function getdomains(address) --address is the user's 10-character string, like "kcyd5vejdw"
   local t = explode(";", http.get(base .. "?listnames=" .. address).readAll())
   t[#t] = nil
-  return t
+  local ta = {}
+  for i = 1, #t do
+    ta[t[i]] = http.get("http://ceriat.net/krist/?a=" .. t[i]).readAll()
+  end
+  return ta
 end
 --Sending money
 function give(to, amount, password, isVault) --Be sure to set "isVault" to true if you're using a sha256 hash!
