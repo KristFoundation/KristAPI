@@ -1,5 +1,5 @@
 --KristAPI Alpha
-local version = "Alpha 0.61"
+local version = "Alpha 0.62"
 if not http then
   printError("KristAPI " .. version .. " requires the HTTP API to be enabled!")
   failedLoad = true
@@ -336,6 +336,13 @@ end
 function balance(address) --Used with miner address, you can do balance(createaddress(password)) if you want to use the password but it will be slow
   local balance = http.get(base .. "?getbalance=" .. address).readAll()
   return balance
+end
+--Get value of next block
+function blockValue()
+  local baseblock = http.get(base .. "?getbaseblockvalue").readAll()
+  local addon = http.get(base .. "?getdomainaward").readAll()
+  local comb = tonumber(baseblock)+tonumber(addon)
+  return comb
 end
 
 failedLoad = false
